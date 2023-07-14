@@ -1,0 +1,35 @@
+{
+  "site": {
+    "title": "Your News",
+    "base_url": "https://bookworm-light-astro.vercel.app",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/images/newspaper.png",
+    "logo": "/images/logo1.jpg",
+    "logo_width": "200",
+    "logo_height": "34",
+    "logo_text": "Your News"
+  },
+
+  "settings": {
+    "pagination": 5,
+    "summary_length": 100
+  },
+
+  "metadata": {
+    "meta_author": "Thanh Nguyen",
+    "meta_image": "",
+    "meta_description": "Your News"
+  },
+
+  "params": {
+    "contact_form_action": "#",
+    "copyright": "Copyright © 2023 a theme by Thanh Nguyen"
+  },
+
+  "contactinfo": {
+    "address": "355 S Grand Ave <br/> Los Angeles, CA 90071",
+    "email": "info@bookworm.org",
+    "phone": "+800 567 1234"
+  }
+}
