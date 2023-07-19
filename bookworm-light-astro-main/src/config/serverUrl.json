@@ -1,4 +1,5 @@
 {
     "server": "http://127.0.0.1:8000",
-    "listPosts": "/api/blog-page/"
+    "listPosts": "/api/v2/pages/",
+    "listCategories": "/api/v2/category/"
 }

@@ -1,8 +1,8 @@
 ---
 import server_url from "@config/serverUrl.json"
 
-export async function fetchApiSinglePost(id: number) {
-  const response = await fetch(`${server_url.server}${server_url.listPosts}${id}`);
+export async function fetchApiSinglePost(slug: any) {
+  const response = await fetch(`${server_url.server}${server_url.listPosts}?type=blog.BlogPage&slug=${slug}&fields=description,date_post,body,categories(name),author`);
   const data = await response.json();
   return data;
 }

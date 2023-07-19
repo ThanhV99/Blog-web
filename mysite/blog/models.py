@@ -22,6 +22,8 @@ from datetime import datetime
 import locale
 from django.utils import timezone
 
+from wagtail.api import APIField
+from rest_framework import serializers
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -49,8 +51,17 @@ class BlogPageTag(TaggedItemBase):
         related_name='tagged_items',
         on_delete=models.CASCADE
     )
-    
-    
+
+from rest_framework .fields import Field
+class ImageSerializedField(Field):
+    def to_representation(self, value):
+        return {
+            "url": value.file.url,
+            "title": value.title,
+            "width": value.width,
+            "height": value.height
+        }
+        
 class BlogPage(Page):
     date = models.DateField("Post date", null=True, blank=True)
     date_post = models.CharField("Post date formatted", max_length=100, blank=True, null=True)
@@ -65,7 +76,8 @@ class BlogPage(Page):
     )
     author = models.CharField(max_length=100, default="Anonymous")
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
-    categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
+    categories = ParentalManyToManyField('blog.BlogCategory', blank=True, related_name='categories')
+    feed_image = models.ForeignKey('wagtailimages.Image', on_delete=models.SET_NULL, null=True, blank=False, related_name="+")
     
     def main_image(self):
         gallery_item = self.gallery_images.first()
@@ -91,6 +103,16 @@ class BlogPage(Page):
             FieldPanel('author'),
         ], heading="Content News"),
         InlinePanel('gallery_images', label="Gallery images"),
+        FieldPanel("feed_image")
+    ]
+    
+    api_fields = [
+        APIField("date_post"),
+        APIField("description"),
+        APIField("feed_image"),
+        APIField('body'),
+        APIField('categories'),
+        APIField('author'),
     ]
     
     @property
@@ -136,6 +158,11 @@ from wagtail.snippets.models import register_snippet
 
 @register_snippet
 class BlogCategory(models.Model):
+    class Meta:
+        verbose_name_plural = 'blog categories'
+        verbose_name = "blog categories",
+        ordering = ["name"]
+        
     name = models.CharField(max_length=255)
     slug = models.SlugField(
         verbose_name="slug",
@@ -152,9 +179,15 @@ class BlogCategory(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name_plural = 'blog categories'
-        verbose_name = "blog categories",
-        ordering = ["name"]
         
+    api_fields = [
+        APIField('name'),
+    ]
+        
+class BlogPageAuthor(Orderable):
+    page = models.ForeignKey('blog.BlogPage', on_delete=models.CASCADE, related_name='authors')
+    name = models.CharField(max_length=255)
+
+    api_fields = [
+        APIField('name'),
+    ]

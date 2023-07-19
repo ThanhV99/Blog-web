@@ -7,7 +7,7 @@ import { humanize,slugify } from "@lib/utils/textConverter";
 import { BiCalendarEdit,BiCategoryAlt } from "react-icons/bi/index.js";
 import server_url from "@config/serverUrl.json"
 
-// const authors = await getSinglePage("authors");
+
 const { summary_length } = config.settings;
 const { className, posts, fluid } = Astro.props;
 
@@ -17,12 +17,12 @@ const { className, posts, fluid } = Astro.props;
   {
     posts.map((post: any, i: number) => (
       <div class={i === 0 && fluid != false ? "col-12" : "col-12 sm:col-6"}>
-        {post.gallery_images.length != 0 && (
-          <a href={`/${post.id}`} class="rounded-lg block hover:text-primary overflow-hidden group">
+        {post.feed_image != null && (
+          <a href={`/${post.meta.slug}`} class="rounded-lg block hover:text-primary overflow-hidden group" style={`height: ${i === 0 ? 475 : 230}px;  width=${i === 0 ? 925 : 445}px`}>
             <!--lay image dau tien trong api -->
             <img
               class="group-hover:scale-[1.03] transition duration-300 w-full"
-              src={`${server_url.server}${post.gallery_images[0].image_url}`}
+              src={`${server_url.server}${post.feed_image.meta.download_url}`}
               alt=""
               width={i === 0 ? 925 : 445}
               height={i === 0 ? 475 : 230}
@@ -43,7 +43,7 @@ const { className, posts, fluid } = Astro.props;
           </li>
         </ul>
         <h3 class="mb-4">
-          <a href={`/${post.id}`} class="block hover:text-primary transition duration-300">
+          <a href={`/${post.meta.slug}`} class="block hover:text-primary transition duration-300">
             {post.title}
           </a>
         </h3>

@@ -1,20 +1,11 @@
 ---
-import { Image } from "@astrojs/image/components";
-import Share from "@components/Share.astro";
-import SimilarPosts from "@components/SimilarPosts.astro";
+import server_url from "@config/serverUrl.json"
+import { BiCalendarEdit, BiCategoryAlt } from "react-icons/bi/index.js";
 
-import dateFormat from "@lib/utils/dateFormat";
-import similerItems from "@lib/utils/similarItems";
-
-import { BiCalendarEdit,BiCategoryAlt } from "react-icons/bi/index.js";
-
-// const allAuthors = await getSinglePage("authors");
-// const posts = await getSinglePage("posts");
 const { post } = Astro.props;
 
-// const similarPosts = similerItems(post, posts, post.slug);
-const { title, description, date_post, body, categories, author, tags } = post;
-console.log(body)
+const { title, description, date_post, body, categories, author, tags } = post.items[0];
+
 ---
 
 <section class="section">
@@ -34,11 +25,12 @@ console.log(body)
           <li class="mx-3 flex items-center flex-wrap">
             <BiCategoryAlt className="mr-1 h-[18px] w-[18px] text-gray-600" />
             <>
-            <ul>
-              {categories.map((e:any)=>e.name)}
-            </ul>
+              <ul>
+                {categories.map((e: any) => e.name)}
+              </ul>
             </>
           </li>
+          <li class="mx-3 flex items-center flex-wrap"></li>
         </ul>
       </div>
 
@@ -56,12 +48,14 @@ console.log(body)
 
       <div class="md:col-10">
         <div class="content mb-16 text-left">
+          <p class="description">{description}</p>
           {
-            JSON.parse(body).map((e: any)=> {
-              if (e.type === 'content') {
-                return <div set:html={e.value}></div>;
-              } else {
-                return null;
+            body.map((e: any) => {
+              if (e.type === "content") {
+                return <div set:html={e.value} />;
+              } else if (e.type === "image") {
+                return <div class="fig-picture"><img src={`${server_url.server}${e.value.image_url}`} style="width:100%;margin:0"></div>
+                <figcaption itemprop="description" set:html={e.value.caption}></figcaption>;
               }
             })
           }
@@ -72,4 +66,3 @@ console.log(body)
 </section>
 
 <!-- similar posts -->
-

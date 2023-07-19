@@ -9,20 +9,23 @@ import { sortByDate } from "@lib/utils/sortFunctions";
 import PostsTest from "@layouts/PostsTest.astro";
 import {fetchApiListPosts} from '../api/apiListPosts.astro';
 
-const data = await fetchApiListPosts();
+const data = await fetchApiListPosts("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at');
 
-const posts = await getSinglePage("posts");
-const sortedPosts = sortByDate(posts);
-const totalPages = Math.ceil(posts.length / config.settings.pagination);
-const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+// const posts = await getSinglePage("posts");
+// const sortedPosts = sortByDate(posts);
+
+const totalPages = Math.ceil(data.meta.total_count / config.settings.pagination);
+
+// const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+const currentPosts = data.items.slice(0, config.settings.pagination);
 
 ---
 
 <Base>
   <section class="section">
     <div class="container">
-      <PostsTest posts={data} className="mb-16" />
-      <Posts posts={currentPosts} className="mb-16" />
+      <PostsTest posts={currentPosts} className="mb-16" />
+      <!-- <Posts posts={currentPosts} className="mb-16" /> -->
       <Pagination currentPage={1} totalPages={totalPages} />
     </div>
   </section>

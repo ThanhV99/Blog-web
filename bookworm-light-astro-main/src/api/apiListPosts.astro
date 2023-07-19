@@ -1,8 +1,8 @@
 ---
 import server_url from "@config/serverUrl.json"
 
-export async function fetchApiListPosts() {
-  const response = await fetch(`${server_url.server}${server_url.listPosts}`);
+export async function fetchApiListPosts(type?: string, fields?:string, order?:string) {
+  const response = await fetch(`${server_url.server}${server_url.listPosts}?type=${type}&fields=${fields}&order=${order}`);
   const data = await response.json();
   return data;
 }

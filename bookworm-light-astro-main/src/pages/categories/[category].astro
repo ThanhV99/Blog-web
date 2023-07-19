@@ -6,22 +6,29 @@ import { getTaxonomy } from "@lib/taxonomyParser.astro";
 import taxonomyFilter from "@lib/utils/taxonomyFilter";
 import { humanize } from "@lib/utils/textConverter";
 
-export async function getStaticPaths() {
-  const categories = await getTaxonomy("posts", "categories");
+import {fetchApiListCategories} from '../../api/apiListCategories.astro';
+import { fetchApiFilterCategories } from '../../api/apiFilterCategories.astro';
+import PostsTest from "@layouts/PostsTest.astro";
+import config from "@config/config.json";
 
-  return categories.map((category) => {
-    return {
-      params: { category },
-    };
-  });
+export async function getStaticPaths() {
+  const categories = await fetchApiListCategories();
+
+  const paths = categories.items.map((category: any) => ({
+    params: {
+      category: category.slug,
+    },
+    props: {category} ,
+  }));
+  return paths;
 }
 
-const { category } = Astro.params;
+const { category } = Astro.props;
 
-const posts = await getSinglePage("posts");
-const filterByCategory = taxonomyFilter(posts, "categories", category);
+const posts = await fetchApiFilterCategories("blog.BlogPage", "description,date_post,feed_image,categories(name),author",'-first_published_at', `categories=${category.id}`);
 
-const title = humanize(category || "")
+const filterByCategory = posts.items.slice(0, config.settings.pagination);
+const title = category.name
 ---
 
 <Base title={title || "Category"}>
@@ -29,7 +36,8 @@ const title = humanize(category || "")
     <div class="container">
       <p class="text-center mb-4">Showing Posts From</p>
       <h1 class="h2 mb-16 text-center text-primary">{title}</h1>
-      <Posts posts={filterByCategory} fluid={false} />
+      <PostsTest posts={filterByCategory} className="mb-16"/>
+      <!-- <Posts posts={filterByCategory} fluid={false} /> -->
     </div>
   </div>
 </Base>

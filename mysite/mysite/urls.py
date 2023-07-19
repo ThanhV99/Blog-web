@@ -14,19 +14,21 @@ from .serializers import BlogIndexPageViewSet
 
 from .views import BlogPageListAPIView, BlogPageDetailAPIView
 
+from .api import api_router
+from django.urls import re_path
 
-router = DefaultRouter()
-router.register(r'api/blog-index-test', BlogIndexPageViewSet, basename='blogindexpage')
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
+    path('api/v2/', api_router.urls),
     
-    path('api/blog-page/', BlogPageListAPIView.as_view(), name='blog-page-api'),
-    path('api/blog-page/<int:pk>/', BlogPageDetailAPIView.as_view(), name='blog-page-detail-api'),
-] + router.urls
+    # path('api/blog-page/', BlogPageListAPIView.as_view(), name='blog-page-api'),
+    # path('api/blog-page/<int:pk>/', BlogPageDetailAPIView.as_view(), name='blog-page-detail-api'),
+    re_path(r'^', include(wagtail_urls)),
+]
 
 if settings.DEBUG:
     from django.conf.urls.static import static

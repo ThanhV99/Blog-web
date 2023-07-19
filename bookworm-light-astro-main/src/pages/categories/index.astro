@@ -2,8 +2,11 @@
 import Base from "@layouts/Base.astro";
 import { getTaxonomy } from "@lib/taxonomyParser.astro";
 import { humanize } from "@lib/utils/textConverter";
+import {fetchApiListCategories} from '../../api/apiListCategories.astro';
 
-const categories = await getTaxonomy("posts", "categories");
+// const categories = await getTaxonomy("posts", "categories");
+const categories = await fetchApiListCategories();
+
 // const categories = ["doi song", "abc"]
 
 import { BiCategoryAlt } from "react-icons/bi/index.js";
@@ -15,14 +18,15 @@ import { BiCategoryAlt } from "react-icons/bi/index.js";
       <h1 class="h2 page-heading">Categories</h1>
       <ul class="space-x-4">
         {
-          categories.map((category) => (
+          categories.items.map((category: any) => (
             <li class="inline-block">
               <a
-                href={`/categories/${category}`}
+                href={`/categories/${category.slug}`}
                 class="rounded-lg bg-theme-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white flex items-center group"
               >
                 <BiCategoryAlt className="mr-1 text-primary group-hover:text-white transition h-6 w-6 scale-75" />
-                <>{humanize(category || "")}</>
+                <!-- <>{humanize(category || "")}</> -->
+                {category.name}
               </a>
             </li>
           ))
@@ -31,3 +35,9 @@ import { BiCategoryAlt } from "react-icons/bi/index.js";
     </div>
   </section>
 </Base>
+
+<style>
+  .inline-block{
+    margin-bottom: 10px;
+  }
+</style>
