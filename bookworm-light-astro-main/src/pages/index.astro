@@ -7,16 +7,13 @@ import { getSinglePage} from "@lib/contentParser.astro";
 import { sortByDate } from "@lib/utils/sortFunctions";
 // import BlogPost from "../api/testapi";
 import PostsTest from "@layouts/PostsTest.astro";
-import {fetchApiListPosts} from '../api/apiListPosts.astro';
 
-const data = await fetchApiListPosts("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at');
+import {fetchPostsList} from '../api/data'
 
-// const posts = await getSinglePage("posts");
-// const sortedPosts = sortByDate(posts);
+const data = await fetchPostsList("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at')
 
 const totalPages = Math.ceil(data.meta.total_count / config.settings.pagination);
 
-// const currentPosts = sortedPosts.slice(0, config.settings.pagination);
 const currentPosts = data.items.slice(0, config.settings.pagination);
 
 ---

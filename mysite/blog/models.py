@@ -26,6 +26,7 @@ from wagtail.api import APIField
 from rest_framework import serializers
 
 class BlogIndexPage(Page):
+    age_description = "Use this page for converting users"
     intro = RichTextField(blank=True)
 
     def get_context(self, request):

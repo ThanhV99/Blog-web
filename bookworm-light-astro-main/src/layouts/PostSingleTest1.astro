@@ -1,10 +1,20 @@
 ---
 import server_url from "@config/serverUrl.json"
 import { BiCalendarEdit, BiCategoryAlt } from "react-icons/bi/index.js";
+import Share from "@components/Share.astro";
+import similerItems from "@lib/utils/similarItems";
+import SimilarPosts from "@components/SimilarPosts.astro";
+import {fetchPostsList} from "../api/data"
+import {fetchCategoriesList} from '../api/categories';
+import {fetchFilterCategories} from '../api/data'
 
 const { post } = Astro.props;
 
 const { title, description, date_post, body, categories, author, tags } = post.items[0];
+const similarPostsCategory = await fetchFilterCategories("blog.BlogPage", "description,date_post,feed_image,categories(name),author",'-first_published_at', 3, categories[0].id);
+
+// const posts = await fetchPostsList("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at');
+// const similarPosts = similerItems(post, posts, post.slug);
 
 ---
 
@@ -60,9 +70,30 @@ const { title, description, date_post, body, categories, author, tags } = post.i
             })
           }
         </div>
+        <div class="flex flex-wrap items-center justify-between">
+          <ul class="mr-4 mb-4 space-x-3">
+            tags
+          </ul>
+          <Share
+            className="social-share mb-4"
+            title={title}
+            description={description}
+            slug={post.slug}
+          />
+        </div>
       </div>
     </article>
   </div>
 </section>
 
 <!-- similar posts -->
+{
+  similarPostsCategory.meta.total_count > 0 && (
+    <section class="section pt-0">
+      <div class="container">
+        <h2 class="mb-8 text-center h3">Similar Posts</h2>
+        <SimilarPosts posts={similarPostsCategory} />
+      </div>
+    </section>
+  )
+}

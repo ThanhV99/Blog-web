@@ -6,13 +6,14 @@ import { getTaxonomy } from "@lib/taxonomyParser.astro";
 import taxonomyFilter from "@lib/utils/taxonomyFilter";
 import { humanize } from "@lib/utils/textConverter";
 
-import {fetchApiListCategories} from '../../api/apiListCategories.astro';
-import { fetchApiFilterCategories } from '../../api/apiFilterCategories.astro';
 import PostsTest from "@layouts/PostsTest.astro";
 import config from "@config/config.json";
 
+import {fetchCategoriesList} from '../../api/categories';
+import {fetchFilterCategories} from '../../api/data'
+
 export async function getStaticPaths() {
-  const categories = await fetchApiListCategories();
+  const categories = await fetchCategoriesList();
 
   const paths = categories.items.map((category: any) => ({
     params: {
@@ -25,7 +26,7 @@ export async function getStaticPaths() {
 
 const { category } = Astro.props;
 
-const posts = await fetchApiFilterCategories("blog.BlogPage", "description,date_post,feed_image,categories(name),author",'-first_published_at', `categories=${category.id}`);
+const posts = await fetchFilterCategories("blog.BlogPage", "description,date_post,feed_image,categories(name),author",'-first_published_at', config.settings.pagination, category.id);
 
 const filterByCategory = posts.items.slice(0, config.settings.pagination);
 const title = category.name

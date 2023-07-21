@@ -2,12 +2,10 @@
 import Base from "@layouts/Base.astro";
 import { getTaxonomy } from "@lib/taxonomyParser.astro";
 import { humanize } from "@lib/utils/textConverter";
-import {fetchApiListCategories} from '../../api/apiListCategories.astro';
 
-// const categories = await getTaxonomy("posts", "categories");
-const categories = await fetchApiListCategories();
+import {fetchCategoriesList} from '../../api/categories';
 
-// const categories = ["doi song", "abc"]
+const categories = await fetchCategoriesList();
 
 import { BiCategoryAlt } from "react-icons/bi/index.js";
 ---

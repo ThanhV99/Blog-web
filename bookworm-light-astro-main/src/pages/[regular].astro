@@ -5,12 +5,12 @@ import PostSingle from "@layouts/PostSingle.astro";
 import PostSingleTest from "../layouts/PostSingleTest1.astro";
 import { getSinglePage } from "@lib/contentParser.astro";
 
-import { fetchApiListPosts } from '../api/apiListPosts.astro';
-import {fetchApiSinglePost} from '../api/apiSinglePost.astro';
+import {fetchPostsList} from '../api/data'
+import {fetchSinglePost} from '../api/singlePost'
 
 
 export async function getStaticPaths() {
-  const data = await fetchApiListPosts("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at');
+  const data = await fetchPostsList("blog.BlogPage", 'description,date_post,feed_image,categories(id,name),author', '-first_published_at');
   const paths = data.items.map((page: any) => ({
     params: {
       regular: page.meta.slug,
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { title, meta_title, description, image } = page;
-const post = await fetchApiSinglePost(page.meta.slug)
+const post = await fetchSinglePost(page.meta.slug)
 
 ---
 
@@ -33,6 +33,6 @@ const post = await fetchApiSinglePost(page.meta.slug)
   image={image}
 >
   {
-    <PostSingleTest post={post} />
+    <PostSingleTest post={post}/>
   }
 </Base>
