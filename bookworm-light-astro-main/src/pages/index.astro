@@ -5,12 +5,13 @@ import Pagination from "@layouts/components/Pagination.astro";
 import Posts from "@layouts/Posts.astro";
 import { getSinglePage} from "@lib/contentParser.astro";
 import { sortByDate } from "@lib/utils/sortFunctions";
-// import BlogPost from "../api/testapi";
+
 import PostsTest from "@layouts/PostsTest.astro";
 
-import {fetchPostsList} from '../api/data'
+import {fetchPostsList, PostsList} from '../api/data'
 
 const data = await fetchPostsList("blog.BlogPage", 'description,date_post,feed_image,categories(name),author', '-first_published_at')
+if (!data) return Astro.redirect('/404')
 
 const totalPages = Math.ceil(data.meta.total_count / config.settings.pagination);
 

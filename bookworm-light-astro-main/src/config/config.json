@@ -5,9 +5,9 @@
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/newspaper.png",
-    "logo": "/images/logo1.jpg",
+    "logo": "/images/logo11.jpg",
     "logo_width": "200",
-    "logo_height": "34",
+    "logo_height": "70",
     "logo_text": "Your News"
   },
 

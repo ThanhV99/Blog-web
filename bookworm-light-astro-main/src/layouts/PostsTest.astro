@@ -23,7 +23,7 @@ const { className, posts, fluid } = Astro.props;
             <img
               class="group-hover:scale-[1.03] transition duration-300 w-full"
               src={`${server_url.server}${post.feed_image.meta.download_url}`}
-              alt=""
+              alt={`${post.title}`}
               width={i === 0 ? 925 : 445}
               height={i === 0 ? 475 : 230}
             />
@@ -48,7 +48,7 @@ const { className, posts, fluid } = Astro.props;
           </a>
         </h3>
         <p class="text-text">
-          {post.description}...
+          {post.description.slice(0, Number(i === 0 && fluid != false ? summary_length * 2 : summary_length))}...
         </p>
       </div>
     ))

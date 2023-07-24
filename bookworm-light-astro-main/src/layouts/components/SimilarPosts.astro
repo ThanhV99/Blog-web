@@ -13,11 +13,11 @@ const { posts } = Astro.props;
     posts.items.map((post: any, i: number) => (
       <div class={`col-12 sm:col-6 md:col-4 ${i === 2 && "hidden md:block"}`}>
         {post.feed_image && (
-          <a href={`/${post.meta.slug}`} class="rounded-lg block hover:text-primary overflow-hidden group">
+          <a href={`/${post.meta.slug}`} class="rounded-lg block hover:text-primary overflow-hidden group" style="width: 296px; height:153px">
             <img
               class="group-hover:scale-[1.05] transition duration-300 w-full"
               src={`${server_url.server}${post.feed_image.meta.download_url}`}
-              alt=""
+              alt={`${post.title}`}
               width={445}
               height={230}
             />

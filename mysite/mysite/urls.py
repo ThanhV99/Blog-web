@@ -14,7 +14,7 @@ from .serializers import BlogIndexPageViewSet
 
 from .views import BlogPageListAPIView, BlogPageDetailAPIView
 
-from .api import api_router
+from .api import api_router, TotalBlogPostsAPIView
 from django.urls import re_path
 
 
@@ -25,8 +25,7 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
     path('api/v2/', api_router.urls),
     
-    # path('api/blog-page/', BlogPageListAPIView.as_view(), name='blog-page-api'),
-    # path('api/blog-page/<int:pk>/', BlogPageDetailAPIView.as_view(), name='blog-page-detail-api'),
+    path('api/v2/total-blog-posts/', TotalBlogPostsAPIView.as_view(), name='total_blog_posts'),
     re_path(r'^', include(wagtail_urls)),
 ]
 
